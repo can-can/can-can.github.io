@@ -1,0 +1,25 @@
+---
+layout: default
+permalink: /zh/
+category: zh
+---
+
+<div class="home">
+    {% for post in site.categories.zh%}
+    <div class="post postContent">
+        <div  class="postDate"><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%Y年%m月%d日" }}</time>
+        </div>
+        <div class="postTag">
+            {{post.tag}}
+        </div>
+        <br>
+        <div class="postTitle">
+            <a target="_blank"  class='postLink' href="{{site.url}}{{site.baseurl}}{{post.url}}">{{post.title}}</a>
+        </div>
+        <div class="postExt">
+            {{ post.content | strip_html | truncate:200}}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>

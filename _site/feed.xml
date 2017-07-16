@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Optional&lt;String&gt;</title>
+    <description>Grow up with ...</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 16 Jul 2017 21:23:12 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Jul 2017 21:23:12 +0800</lastBuildDate>
+    <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>Mybatis使用提示</title>
+        <description>&lt;h2 id=&quot;1-使用注解方式生成mapper时不能有重名方法&quot;&gt;1. 使用注解方式生成Mapper时，不能有重名方法&lt;/h2&gt;
+&lt;h3 id=&quot;例子&quot;&gt;例子&lt;/h3&gt;
+
+&lt;p&gt;下面使用了Java方法重载来实现了两个命为&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;方法。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public interface TestDAO {
+    @Select(&quot;SELECT COUNT(id) FROM table WHERE id = #{id}&quot;)
+    int select(@Param(&quot;id&quot;) int id);
+
+    @Delete(&quot;SELECT COUNT(id) FROM table WHERE id = #{id} AND id2 = #{id2}&quot;)
+    int select(@Param(&quot;id&quot;) int id, @Param(&quot;id2&quot;) int id2);
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;运行时会报这个异常。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: Mapped Statements collection already contains value for dao.TestDAO.select
+    at org.apache.ibatis.session.Configuration$StrictMap.put(Configuration.java:859)
+    at org.apache.ibatis.session.Configuration$StrictMap.put(Configuration.java:831)
+    at org.apache.ibatis.session.Configuration.addMappedStatement(Configuration.java:655)
+    at org.apache.ibatis.builder.MapperBuilderAssistant.addMappedStatement(MapperBuilderAssistant.java:302)
+    at org.apache.ibatis.builder.annotation.MapperAnnotationBuilder.parseStatement(MapperAnnotationBuilder.java:351)
+    at org.apache.ibatis.builder.annotation.MapperAnnotationBuilder.parse(MapperAnnotationBuilder.java:134)
+    at org.apache.ibatis.binding.MapperRegistry.addMapper(MapperRegistry.java:72)
+    at org.apache.ibatis.session.Configuration.addMapper(Configuration.java:728)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;原因是什么呢？我们从源码来看一下。下面是&lt;code class=&quot;highlighter-rouge&quot;&gt;Configuration.java:655&lt;/code&gt;这行代码。我们发现Myatis将&lt;code class=&quot;highlighter-rouge&quot;&gt;ms.getId()&lt;/code&gt;当作key放到了StrictMap中，从而导致了StrictMap抛出异常。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//at org.apache.ibatis.session.Configuration.addMappedStatement(Configuration.java:655)
+public void addMappedStatement(MappedStatement ms) {
+    mappedStatements.put(ms.getId(), ms);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;继续查找源码发现有两个地方生成MappedStatement的id。
+第一个是&lt;code class=&quot;highlighter-rouge&quot;&gt;XMLStatementBuilder:57&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;String id = context.getStringAttribute(&quot;id&quot;);&lt;/code&gt;。是XML解析的时候，获取id属性上的字符串来作为key。
+第二个是&lt;code class=&quot;highlighter-rouge&quot;&gt;MapperAnnotationBuilder:292&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt; final String mappedStatementId = type.getName() + &quot;.&quot; + method.getName();&lt;/code&gt;。是通过注解生成Mapper时，将Mapper类名加上方法名作为id，并没有将方法参数作为id的一部分，所以导致了上述异常。&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/zh/2017/07/16/tips-for-mybatis.html</link>
+        <guid isPermaLink="true">http://localhost:4000/zh/2017/07/16/tips-for-mybatis.html</guid>
+        
+        <category>MYBATIS DAO</category>
+        
+        
+        <category>zh</category>
+        
+      </item>
+    
+      <item>
+        <title>Tips for Mybatis</title>
+        <description>&lt;h2 id=&quot;1-mapper-can-not-have-two-methods-with-same-name-while-using-annotation-to-impelment-mapper&quot;&gt;1. Mapper can not have two methods with same name, while using annotation to impelment Mapper&lt;/h2&gt;
+&lt;h3 id=&quot;exmaple&quot;&gt;Exmaple&lt;/h3&gt;
+
+&lt;p&gt;The code below shows two methods with same name, using Java’s overload, and can be compiled correctly.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public interface TestDAO {
+    @Select(&quot;SELECT COUNT(id) FROM table WHERE id = #{id}&quot;)
+    int select(@Param(&quot;id&quot;) int id);
+
+    @Delete(&quot;SELECT COUNT(id) FROM table WHERE id = #{id} AND id2 = #{id2}&quot;)
+    int select(@Param(&quot;id&quot;) int id, @Param(&quot;id2&quot;) int id2);
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But, when we run the code, This exception will be raised.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: Mapped Statements collection already contains value for dao.TestDAO.select
+    at org.apache.ibatis.session.Configuration$StrictMap.put(Configuration.java:859)
+    at org.apache.ibatis.session.Configuration$StrictMap.put(Configuration.java:831)
+    at org.apache.ibatis.session.Configuration.addMappedStatement(Configuration.java:655)
+    at org.apache.ibatis.builder.MapperBuilderAssistant.addMappedStatement(MapperBuilderAssistant.java:302)
+    at org.apache.ibatis.builder.annotation.MapperAnnotationBuilder.parseStatement(MapperAnnotationBuilder.java:351)
+    at org.apache.ibatis.builder.annotation.MapperAnnotationBuilder.parse(MapperAnnotationBuilder.java:134)
+    at org.apache.ibatis.binding.MapperRegistry.addMapper(MapperRegistry.java:72)
+    at org.apache.ibatis.session.Configuration.addMapper(Configuration.java:728)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Why dose this exception be raised? Let us look source code. The code below is at &lt;code class=&quot;highlighter-rouge&quot;&gt;Configuration.java:655&lt;/code&gt;. I find that Myatis put &lt;code class=&quot;highlighter-rouge&quot;&gt;ms.getId()&lt;/code&gt; as key into StrictMap，causing the exception above.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//at org.apache.ibatis.session.Configuration.addMappedStatement(Configuration.java:655)
+public void addMappedStatement(MappedStatement ms) {
+    mappedStatements.put(ms.getId(), ms);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Further, I dig source code and find two codes will generate the id of MappedStatement;
+First one is at &lt;code class=&quot;highlighter-rouge&quot;&gt;XMLStatementBuilder:57&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;String id = context.getStringAttribute(&quot;id&quot;);&lt;/code&gt;. This code show us that the id is excract from attribute named id in XML.
+Second one is at &lt;code class=&quot;highlighter-rouge&quot;&gt;MapperAnnotationBuilder:292&lt;/code&gt;, ` final String mappedStatementId = type.getName() + “.” + method.getName();`. When generate Mapper by annotation, Mybatis generate id by adding class name and method name and no argument, so there will be raised exception when method name is duplicated&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/en/2017/07/16/tips-for-mybatis.html</link>
+        <guid isPermaLink="true">http://localhost:4000/en/2017/07/16/tips-for-mybatis.html</guid>
+        
+        
+        <category>en</category>
+        
+      </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,12 @@
+<script type="text/javascript">
+window.onload = function(){
+    try{
+        if(window.navigator.language.substr(0,2) === 'zh'){
+            window.location = '/zh';
+            return;
+        }
+    }catch(err){
+    }
+    window.location = '/en'
+}
+</script>
