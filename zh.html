@@ -1,6 +1,5 @@
 ---
 layout: default
-permalink: /zh/
 category: zh
 ---
 
@@ -14,7 +13,7 @@ category: zh
         </div>
         <br>
         <div class="postTitle">
-            <a target="_blank"  class='postLink' href="{{post.id}}">{{post.title}}</a>
+            <a  class='postLink' href="{{post.url}}">{{post.title}}</a>
         </div>
         <div class="postExt">
             {{ post.content | strip_html | truncate:200}}
