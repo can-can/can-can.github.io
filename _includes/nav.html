@@ -2,6 +2,7 @@
     <div class="trigger site-navigation">
         <a class="page-link" href="/{{page.category}}">HOME</a>
 
+        {{ page.id }}
         {% if page.category == "en" %}
         <a class="site-language" href="{{page.id | replace_first: "en", "zh"}}">中文</a>
         {% endif %}
