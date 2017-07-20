@@ -21,7 +21,7 @@ public interface TestDAO {
 
 ~~~
 
-But, when we run the code, This exception will be raised.
+But, when running the code, this exception will be raised.
 ~~~
 Exception in thread "main" java.lang.IllegalArgumentException: Mapped Statements collection already contains value for dao.TestDAO.select
     at org.apache.ibatis.session.Configuration$StrictMap.put(Configuration.java:859)
@@ -34,7 +34,7 @@ Exception in thread "main" java.lang.IllegalArgumentException: Mapped Statements
     at org.apache.ibatis.session.Configuration.addMapper(Configuration.java:728)
 ~~~
 
-Why dose this exception be raised? Let us look source code. The code below is at `Configuration.java:655`. I find that Myatis put `ms.getId()` as key into StrictMap，causing the exception above.
+Why dose this exception be raised? Let us look source code. The code below is at `Configuration.java:655`. I find that MyBatis put `ms.getId()` as key into StrictMap，causing the exception above.
 ~~~
 //at org.apache.ibatis.session.Configuration.addMappedStatement(Configuration.java:655)
 public void addMappedStatement(MappedStatement ms) {
@@ -44,4 +44,4 @@ public void addMappedStatement(MappedStatement ms) {
 
 Further, I dig source code and find two codes will generate the id of MappedStatement;
 First one is at `XMLStatementBuilder:57`, `String id = context.getStringAttribute("id");`. This code show us that the id is excract from attribute named id in XML.
-Second one is at `MapperAnnotationBuilder:292`, ` final String mappedStatementId = type.getName() + "." + method.getName();`. When generate Mapper by annotation, Mybatis generate id by adding class name and method name and no argument, so there will be raised exception when method name is duplicated
+Second one is at `MapperAnnotationBuilder:292`, ` final String mappedStatementId = type.getName() + "." + method.getName();`. When generate Mapper by annotation, id of MappedStatement consists of class name and method name without arguments, so there will be raised exception when method name is duplicated
