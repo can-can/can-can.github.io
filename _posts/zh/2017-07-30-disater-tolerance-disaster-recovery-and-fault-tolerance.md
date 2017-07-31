@@ -33,7 +33,7 @@ tag: 容灾 容错 灾难恢复 高可用
 [容灾](https://baike.baidu.com/item/%E5%AE%B9%E7%81%BE)是指:
 > 容灾系统是指在相隔较远的异地，建立两套或多套功能相同的IT系统，互相之间可以进行健康状态监视和功能切换，当一处系统因意外（如火灾、地震等）停止工作时，整个应用系统可以切换到另一处，使得该系统功能可以继续正常工作。
 
-在英文文章中，Disaster Tolerance 没有找到统一的描述。有一些文章在说自己系统是”Disaster Tolerant Architecture“[1] [2]。大概意思是两个集群，primary提供服务，second做备份，不提供服务。当primary挂了，就自动跳到second集群。
+在英文文章中，Disaster Tolerance 没有找到统一的描述。有一些文章在说自己系统是“Disaster Tolerant Architecture”[1] [2]。大概意思是两个集群，primary提供服务，second做备份，不提供服务。当primary挂了，就自动跳到second集群。
 
 [灾难恢复](https://en.wikipedia.org/wiki/Disaster_recovery)是指:
 >一系列的原则、过程和工具，能使关键设施和系统在遭遇灾害后恢复。
