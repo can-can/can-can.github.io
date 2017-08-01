@@ -1,51 +1,70 @@
 ---
 layout: post
-title: 对容灾、容错的理解
+title: 什么是高可用、容错、容灾和灾难恢复？
 categories: zh
 category: zh
-tag: 容灾 容错 灾难恢复 高可用
+tag: 高可用 容错 容灾 灾难恢复
 
 ---
 
-## 背景
-最近在考虑提高可用性的事情。团队使用的名词是”容灾“这个词。但是还有一些类似的概念比较混淆，如容错，高可用，灾难恢复。我决定先确定这些名词的概念，再去讨论可用性的问题。
+# 前言	
+在讨论系统可用性时，常会涉及到“高可用”、“容灾”和“容错”几个概念。还有一个“灾难恢复”较少用到。
 
-## 概念解析
-一下内容作为个人的理解，作为之后其他人讨论问题时术语的定义。
-### 高可用（High Availability)
+之前对这几个概念也知之甚少，为了交流方便，我在网上调研了这几个概念，并做了总结和理解。也发现了一些有意思的事情。
+
+
+# 高可用（High Availability)
 [高可用](https://en.wikipedia.org/wiki/High_availability)是指：
 >一个系统的可用性高于通常水准。
 
 一般会用[SLA](https://en.wikipedia.org/wiki/Service-level_agreement)来衡量。
 
-### 容错(Fault Tolerance)
-#### 概念
+高可用是一个宏观的概念，只要你的系统 uptime 够长，那么你的系统就可以称之为高可用系统。
+
+容灾和容错都是为了达到高可用这个目标而做的方案。
+
+在调研时，发现错误的使用方法有以下两种：
+1. 将容灾和高可用做对比，但内容却是容灾和容错的对比。
+2. 将高可用做为容灾的措施。
+# 容错(Fault Tolerance)
 [容错](https://en.wikipedia.org/wiki/Fault_tolerance)是指:
 >即使出现错误，系统也能在不影响用户或者影响用户较小的情况下，提供操作的能力。
 
 需要指出的是，容错是在系统的内部进行的。所以要做容错，需要划分好系统的边界。
-另外，在容错的概念中系统的所有组件都在提供服务。
-#### 例子
-最简单的一个例子集群。首先集群中的服务器都在提供服务，当集群中的某一台服务器挂掉时，并不会影响集群对外提供服务。
 
-### 容灾(Disaster Tolerance)和灾难恢复(Disaster Recovery)
-#### 概念
-[容灾](https://baike.baidu.com/item/%E5%AE%B9%E7%81%BE)是指:
-> 容灾系统是指在相隔较远的异地，建立两套或多套功能相同的IT系统，互相之间可以进行健康状态监视和功能切换，当一处系统因意外（如火灾、地震等）停止工作时，整个应用系统可以切换到另一处，使得该系统功能可以继续正常工作。
+# 容灾(Disaster Tolerance)和灾难恢复(Disaster Recovery)
+这两个概念为什么放到一起呢？因为通过调研，我发现这两个概念是**等价**的。
 
-在英文文章中，Disaster Tolerance 没有找到统一的描述。有一些文章在说自己系统是“Disaster Tolerant Architecture”[1] [2]。大概意思是两个集群，primary提供服务，second做备份，不提供服务。当primary挂了，就自动跳到second集群。
+我们先来看一下这两个概念。
 
 [灾难恢复](https://en.wikipedia.org/wiki/Disaster_recovery)是指:
 >一系列的原则、过程和工具，能使关键设施和系统在遭遇灾害后恢复。
 
-这两个概念的共同点都是“整个系统”挂了以后，可以恢复。这也是它们和容错的一个区别。
+灾难恢复有[等级划分](https://en.wikipedia.org/wiki/Seven_tiers_of_disaster_recovery)。
 
-#### 它们是一个概念吗？
-从概念上看，灾难恢复更宏观一些，而容灾更具体一些。
-根据灾难恢复的[等级划分](https://en.wikipedia.org/wiki/Seven_tiers_of_disaster_recovery)可以看出，容灾概念的表现正好符合最高等级的描述。
-那么我理解为，容灾是灾难恢复的一个具体的高级别的实践。
+百度百科给出了容灾的定义，但英文没有的定义。
 
-[1] http://docs.oracle.com/cd/E19528-01/819-0420/introduction-7/index.html
+[容灾](https://baike.baidu.com/item/%E5%AE%B9%E7%81%BE)是指:
+> 容灾系统是指在相隔较远的异地，建立两套或多套功能相同的IT系统，互相之间可以进行健康状态监视和功能切换，当一处系统因意外（如火灾、地震等）停止工作时，整个应用系统可以切换到另一处，使得该系统功能可以继续正常工作。
 
-[2] https://docstore.mik.ua/manuals/hp-ux/en/T1906-90022/ch01s02.html
+调研中，我发现使用“容灾”有以下情况：
+1. 名词用“容灾”，内容讲的是“灾难恢复”。有的更是中文容“容灾”，英文用DR。
+2. 就是上述百度百科中的描述。这种情况，相当于灾难恢复级别的[最高级别](https://en.wikipedia.org/wiki/Seven_tiers_of_disaster_recovery#Tier_7:_Highly_automated.2C_business_integrated_solution)的一个方案。
+
+所以给出了它们是等价的结论。
+
+我更倾向于使用“灾难恢复”，即使“容灾”更顺口。原因见下面的发现。
+## 有意思的发现
+Google “容灾”，有100万条结果。
+Google “灾难恢复”， 有600万条结果。
+Google “Disater Tolerance"，有66万条结果。
+Google “Disater Recovery"，有3800万条结果。
+
+## 容错和灾难恢复的区别
+容错是系统内发生错误，系统还可以使用。
+
+灾难恢复是遇到了灾害，发生系统之外。结果可能是整个机房都不可用。
+
+# 结束
+文章中没有给出调研材料的链接做为证据，以免产生误会。大家可以自行搜索。
 
