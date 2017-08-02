@@ -52,8 +52,11 @@ So I conclude that DR and DT are same concepts.
 I'm prefer to Disater Recovery than Disater Tolerance, because of data below.
 ## Interesting Data
 Google "容灾", Disater Tolerance in chinese, showing 1 million results.
+
 Google "灾难恢复", Disater Recovery in chinses, showing 6 million results.
+
 Google "Disaster Tolerance", showing 660 thousand results.
+
 Google "Disaster Recovery", showing 38 million results。
 
 ## Difference between Fault Tolerance and Disaster Recovery
