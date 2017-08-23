@@ -1,8 +1,8 @@
 
 <div class="wrapper">
-    <center> <a href="/"><div class="site-title">{{site.title | xml_escape}}</div></a></center>
+    <center> <a href="/"><div class="site-title">{{site.titles[page.category] | xml_escape}}</div></a></center>
 </div>
 <div class="wrapper site-description">
-    <center>  {{site.description}} </center>
+    <center> {{ site.descriptions[page.category] | xml_escape }} </center>
 </div>
 {% include nav.html %}
