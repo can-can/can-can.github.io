@@ -2,6 +2,9 @@
     <div class="trigger site-navigation">
         {% for item in site.navs %}
         <a class="page-link" href="{{item[page.category].url}}">{{item[page.category].title}}</a>
+        {% if forloop.last != true %}
+        <span class="exclamationMark">/</span>
+        {% endif %}
         {% endfor %}
 
         {% if page.category == "en" %}
@@ -10,12 +13,5 @@
         {% if page.category == "zh" %}
         <a class="site-language" href="{{page.url | replace_first: "zh", "en"}}">ENGLISH</a>
         {% endif %}
-
-        {% for sitePage in site.pages %}
-        {% if sitePage.title %}
-
-        <span class="exclamationMark">/</span><a class="page-link" href="{{sitePage.url | prepend: site.baseurl }}">{{sitePage.title}}</a>
-        {% endif %}
-        {% endfor %}
     </div>
 </div>
