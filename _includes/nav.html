@@ -1,6 +1,8 @@
 <div class="wrapper">
     <div class="trigger site-navigation">
-        <a class="page-link" href="/{{page.category}}.html">HOME</a>
+        {% for item in site.navs %}
+        <a class="page-link" href="{{item[page.category].url}}">{{item[page.category].title}}</a>
+        {% endfor %}
 
         {% if page.category == "en" %}
         <a class="site-language" href="{{page.url | replace_first: "en", "zh"}}">中文</a>

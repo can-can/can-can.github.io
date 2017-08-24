@@ -1,5 +1,25 @@
-title: Optional<String>
-description: Grow up with ...
+title: C.C.的博客
+titles:
+    zh: C.C.的博客
+    en: C.C.'s Blog
+description: 了解 学习 分享
+descriptions:
+    zh: 了解 学习 分享
+    en: KNOW LEARN SHARE
+navs:
+    -
+        zh:
+            title: 首页
+            url: /zh.html
+        en:
+            title: HOME
+            url: /en.html
+    -
+        zh:
+            title: 推荐文章
+            url: /zh/articles.html
+        en:
+            title: ARTICLES
+            url: /en/articles.html
 github_username: can-can
-#url: "can-can.github.io"
 markdown: kramdown

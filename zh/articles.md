@@ -1,0 +1,8 @@
+---
+layout: page
+category: zh
+---
+
+# 职业生涯
+
+[https://cie.acm.org/blog/career-path-software-engineer](https://cie.acm.org/blog/career-path-software-engineer){:target="_blank"}
