@@ -1,6 +1,6 @@
 
 <div class="wrapper">
-    <center> <a href="/"><div class="site-title">{{site.titles[page.category] | xml_escape}}</div></a></center>
+    <center> <a href="/{{page.category}}.html"><div class="site-title">{{site.titles[page.category] | xml_escape}}</div></a></center>
 </div>
 <div class="wrapper site-description">
     <center> {{ site.descriptions[page.category] | xml_escape }} </center>
