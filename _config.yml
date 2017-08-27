@@ -21,5 +21,12 @@ navs:
         en:
             title: ARTICLES
             url: /en/articles.html
+
+    -   zh: 
+            title: 书单
+            url: /zh/books.html
+        en:
+            title: Book List
+            url: /en/books.html
 github_username: can-can
 markdown: kramdown
