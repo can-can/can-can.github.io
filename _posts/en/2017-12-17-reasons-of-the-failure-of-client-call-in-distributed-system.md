@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Reasons Of The Failure Of Client Call In Distributed System
-categories: zh
-category: zh
+categories: en
+category: en
 tag: Availability
 
 ---
