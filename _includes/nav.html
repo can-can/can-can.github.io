@@ -7,11 +7,5 @@
         {% endif %}
         {% endfor %}
 
-        {% if page.category == "en" %}
-        <a class="site-language" href="{{page.url | replace_first: "en", "zh"}}">中文</a>
-        {% endif %}
-        {% if page.category == "zh" %}
-        <a class="site-language" href="{{page.url | replace_first: "zh", "en"}}">ENGLISH</a>
-        {% endif %}
     </div>
 </div>
